@@ -1,0 +1,114 @@
+<div class="d-flex">
+  <class
+    href="/"
+    class="d-flex flex-grow-1 align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none">
+    <img
+      src="./assets/icons/icon.png"
+      alt="CELERγ Logo"
+      width="32"
+      height="32"
+      class="d-inline-block align-text-top me-2" />
+    <span class="fs-4 text-body">CELERγ</span>
+  </class>
+  <button
+    id="themeSelector"
+    class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle d-flex align-items-center"
+    data-bs-toggle="dropdown"
+    data-bs-target="#themeSelectorMenu">
+    <i class="bi-moon-stars-fill"></i>
+  </button>
+  <ul
+    id="themeSelectorMenu"
+    class="dropdown-menu dropdown-menu-end"
+    aria-labelledby="bd-theme-text">
+    <li>
+      <button
+        type="button"
+        class="dropdown-item d-flex align-items-center"
+        data-bs-theme-value="light"
+        aria-pressed="false">
+        <i class="bi-sun-fill opacity-50 me-3"></i>
+        Light
+      </button>
+    </li>
+    <li>
+      <button
+        type="button"
+        class="dropdown-item d-flex align-items-center"
+        data-bs-theme-value="dark"
+        aria-pressed="true">
+        <i class="bi-moon-stars-fill opacity-50 me-3"></i>
+        Dark
+      </button>
+    </li>
+    <li>
+      <button
+        type="button"
+        class="dropdown-item d-flex align-items-center"
+        data-bs-theme-value="auto"
+        aria-pressed="false">
+        <i class="bi-circle-half opacity-50 me-3"></i>
+        Auto
+      </button>
+    </li>
+  </ul>
+</div>
+<hr />
+<ul class="nav nav-pills flex-column mb-auto text">
+  <li class="nav-item">
+    <a href="#" class="nav-link text-body active" aria-current="page">
+      <i class="bi bi-house-door-fill me-2"></i>
+      Home
+    </a>
+  </li>
+  <li class="nav-item">
+    <a href="#" class="nav-link text-body">
+      <i class="bi bi-house-door-fill me-2"></i>
+      Quick Review
+    </a>
+  </li>
+  <li class="nav-item">
+    <a href="#" class="nav-link text-body">
+      <i class="bi bi-house-door-fill me-2"></i>
+      Practice Questions
+    </a>
+  </li>
+  <li class="nav-item">
+    <a href="#" class="nav-link text-body">
+      <i class="bi bi-house-door-fill me-2"></i>
+      Exam Strategies
+    </a>
+  </li>
+  <li class="nav-item">
+    <a href="#" class="nav-link text-body">
+      <i class="bi bi-house-door-fill me-2"></i>
+      Resources
+    </a>
+  </li>
+</ul>
+<button
+  id="profile"
+  class="btn text-start"
+  data-bs-toggle="modal"
+  data-bs-target="#signUpModal"></button>
+<hr />
+<small id="copyrightYear" class="text-secondary"></small>
+
+<div id="signUpModal" class="modal fade" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="signUpModalTitle" class="modal-title">Modal title</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div id="signUpModalBody" class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<body></body>

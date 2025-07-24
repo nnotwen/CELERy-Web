@@ -1,0 +1,73 @@
+<form id="signInForm">
+  <div class="mb-3">
+    <div class="alert alert-primary small" role="alert">
+      Please note that the account is stored locally in your browser. Clearing
+      your browser's cache will remove the account.
+    </div>
+    <label for="username" class="form-label">Username</label>
+    <input type="text" class="form-control" id="username" required />
+    <div class="invalid-feedback">Please provide a valid city.</div>
+  </div>
+  Avatar
+  <div
+    id="signupImageChooser"
+    class="d-flex flex-wrap gap-3 justify-content-center mb-2"></div>
+
+  <button type="submit" class="btn btn-primary w-100 mt-2">
+    Create Account
+  </button>
+</form>
+<style>
+  #signupImageChooser input[type='radio']:checked + label img {
+    outline: 3px solid #0d6efd;
+    outline-offset: -3px;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(13, 110, 253, 0.4);
+    transition: outline 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  #signupImageChooser .btn-check:checked + .btn {
+    border: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+  }
+</style>
+<script>
+  for (let i = 0; i < 9; i++) {
+    $('#signupImageChooser').append(
+      `<input type="radio" class="btn-check" name="avatar" id="avatar${i}" autocomplete="off" value="profile_${i}">
+      <label class="btn p-0" for="avatar${i}">
+        <img src="../assets/images/profile_${i}.png" width="75" height="75" class="rounded-circle m-2" />
+      </label>`
+    );
+  }
+  document
+    .getElementById('signInForm')
+    .addEventListener('submit', function (event) {
+      event.preventDefault(); // Prevent page reload
+
+      // Get the entered username
+      const username = document.getElementById('username').value;
+
+      // Get the selected avatar value (if any)
+      const avatarInput = document.querySelector(
+        'input[name="avatar"]:checked'
+      );
+      const avatar = avatarInput ? avatarInput.value : null;
+
+      // Save to localStorage
+      const profiles = JSON.parse(localStorage.getItem('users') || '[]');
+      profiles.push({
+        username: username,
+        avatar: avatar || `profile_${Math.floor(Math.random() * 9)}`,
+        id: Date.now(),
+      });
+
+      localStorage.setItem('users', JSON.stringify(profiles));
+      $('.modal.show').each(function () {
+        const modal = bootstrap.Modal.getInstance(this);
+        if (modal) modal.hide();
+      });
+    });
+</script>
+<body></body>
