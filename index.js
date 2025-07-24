@@ -10,7 +10,7 @@ $(document).ready(function () {
       position: 'sticky',
       top: '0',
     })
-    .load('/components/sidebar.html', function () {
+    .load('./components/sidebar.html', function () {
       const currentYear = new Date().getFullYear();
       $('#copyrightYear').html(
         `Copyright © ${
@@ -107,13 +107,13 @@ $(document).ready(function () {
           $('#signUpModalTitle').text('Create Local Account');
           $('#signUpModalBody')
             .html('')
-            .load('/components/sign-up.html', function () {});
+            .load('./components/sign-up.html', function () {});
         } else if (!profiles.find((x) => x.id === currentUserId)) {
           console.log('No active user found, showing sign up modal');
           $('#signUpModalTitle').text('Sign In');
           $('#signUpModalBody')
             .html('')
-            .load('/components/account-chooser.html', function () {});
+            .load('./components/account-chooser.html', function () {});
         }
       });
 
@@ -126,7 +126,7 @@ $(document).ready(function () {
   // Load homepage content
   $('#home')
     .addClass('w-100 vh-100 p-3 overflow-scroll-y')
-    .load('/components/home.html', function () {
+    .load('./components/home.html', function () {
       const homepageTopics = [
         {
           title: 'Quick Review',
