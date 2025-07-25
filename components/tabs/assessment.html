@@ -13,10 +13,8 @@
       <button
         class="btn nav-link"
         data-bs-toggle="tab"
-        data-bs-target="#assessmentExam"
-        disabled>
+        data-bs-target="#assessmentExam">
         <i class="bi bi-journal-text me-2"></i>
-        Exam
       </button>
     </li>
   </ul>
@@ -25,63 +23,211 @@
       <div class="row g-3 my-2">
         <div id="topicSelector" class="col-lg-6 col-md-12">
           <h5>Select Topics</h5>
-          <input
-            type="checkbox"
-            class="btn-check"
-            id="topics-MSTC"
-            autocomplete="off"
-            checked />
-          <label class="btn btn-outline-primary" for="topics-MSTC">MSTC</label>
-          <input
-            type="checkbox"
-            class="btn-check"
-            id="topics-HPGE"
-            autocomplete="off"
-            checked />
-          <label class="btn btn-outline-primary" for="topics-HPGE">HPGE</label>
-          <input
-            type="checkbox"
-            class="btn-check"
-            id="topics-PSAD"
-            autocomplete="off"
-            checked />
-          <label class="btn btn-outline-primary" for="topics-PSAD">PSAD</label>
+          <div class="py-2">
+            <div class="form-check mb-2">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                type="checkbox"
+                id="topics-MSTC"
+                checked />
+              <label for="topics-MSTC" class="form-check-label">
+                <strong>MSTC</strong>
+                <br />
+                <small class="text-muted">
+                  Mathematics, Surveying, Transportation, and Construction
+                  <br />
+                  (35%, 75 items on Board Exam)
+                </small>
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                type="checkbox"
+                id="topics-HPGE"
+                checked />
+              <label for="topics-HPGE" class="form-check-label">
+                <strong>HPGE</strong>
+                <br />
+                <small class="text-muted">
+                  Hydraulics and Principles of Geotechnical Engineering
+                  <br />
+                  (30%, 50 items on Board Exam)
+                </small>
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                type="checkbox"
+                id="topics-PSAD"
+                checked />
+              <label for="topics-PSAD" class="form-check-label">
+                <strong>PSAD</strong>
+                <br />
+                <small class="text-muted">
+                  Principles of Structural Analysis and Design
+                  <br />
+                  (35% on Board Exam)
+                </small>
+              </label>
+            </div>
+          </div>
           <br />
           <br />
-          <h5>Included Tags</h5>
+          <h5>Select Sources</h5>
           <div id="assessment-tags"></div>
+          <br />
+          <h5>Item Count</h5>
+          <div class="text-muted">Number of questions to generate</div>
+          <div class="d-flex align-items-center gap-3">
+            <!-- Range Slider -->
+            <input
+              type="range"
+              class="form-range flex-grow-1"
+              id="rangeInput"
+              min="1"
+              max="100"
+              value="50" />
+
+            <!-- Editable Number Input -->
+            <input
+              type="number"
+              class="form-control form-control-sm"
+              id="assessment-itemCount"
+              min="1"
+              max="100"
+              value="50"
+              style="width: 80px" />
+          </div>
+          <br />
         </div>
-        <div class="col-lg-6 col-md-12">B</div>
+        <div class="col-lg-6 col-md-12">
+          <h5>Other Options</h5>
+          <div id="assessment-other-options" class="py-2"></div>
+          <div class="my-3 d-flex flex-row-reverse">
+            <button
+              type="button"
+              id="assessment-generate-questions"
+              class="btn btn-primary">
+              Generate Questions
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-    <div role="tabpanel" id="assessmentExam" class="tab-pane fade">B</div>
+    <div role="tabpanel" id="assessmentExam" class="tab-pane fade">
+      <div
+        id="assessmentExamPageNotReady"
+        class="d-flex justify-content-center align-items-center"
+        style="height: 75vh">
+        <div class="text-center">
+          <h1>Please Generate some Questions first</h1>
+          <button class="btn btn-primary" id="goto-setup">Go to Setup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal (Source Select) -->
+  <div
+    class="modal fade"
+    id="assessmentAddSource"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="assessmentAddSourceLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="assessmentAddSourceLabel">
+            Select Sources
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary close"
+            data-bs-dismiss="modal">
+            Close
+          </button>
+          <button
+            type="button"
+            data-bs-dismiss="modal"
+            class="btn btn-primary save">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
 <script>
   $(document).ready(function () {
     const tags = [
-      'CELE 2018',
-      'CELE 2019',
-      'CELE 2020',
-      'CELE 2021',
-      'CELE 2022',
+      'CELE 2018 May',
+      'CELE 2018 Nov',
+      'CELE 2019 May',
+      'CELE 2019 Nov',
+      'CELE 2020 Nov',
+      'CELE 2021 May',
+      'CELE 2021 Nov',
+      'CELE 2022 May',
+      'CELE 2022 Nov',
+      'CELE 2023 Apr',
+      'CELE 2023 Nov',
+      'CELE 2024 Apr',
+      'CELE 2024 Nov',
+      'CELE 2025 Apr',
+      'Gillesania Review',
+      'Padilla Review',
+      'Online Sources',
     ];
 
     for (const tag of tags) {
+      const id = `source-${tag.replace(/ +/g, '-')}`;
       $('#assessment-tags').append(
-        `<span class='badge text-bg-secondary me-2 mb-2'>${tag}<button type="button" class="ms-2 btn btn-close btn-sm remove-tag" style="--bs-btn-padding-y: 0; --bs-btn-padding-x: 0; --bs-btn-font-size: .5rem;" aria-label="Close"></button></span>`
+        `<span class='badge text-bg-secondary me-2 mb-2' data-assessment-tag="${tag}">${tag}<button type="button" class="ms-2 btn btn-close btn-sm remove-tag" style="--bs-btn-padding-y: 0; --bs-btn-padding-x: 0; --bs-btn-font-size: .5rem;" aria-label="Close"></button></span>`
+      );
+      $('#assessmentAddSource .modal-body').append(
+        `<div class="form-check">
+          <input class="form-check-input" type="checkbox" id="${id}" checked>
+          <label class="form-check-label" for="${id}">
+          ${tag}
+          </label> 
+        </div>`
       );
     }
     $('#assessment-tags').append(
-      `<span class="badge text-bg-primary"><button type="button" class="btn btn-sm add-tag" style="--bs-btn-padding-y: 0; --bs-btn-padding-x: 0; --bs-btn-font-size: .5rem;" aria-label="Add"><i class="bi bi-plus-lg"></i></button></span>`
+      `<button data-bs-toggle="modal" data-bs-target="#assessmentAddSource" type="button" class="btn btn-sm btn-primary px-2 add-tag" style="--bs-btn-font-size: .5rem;" aria-label="Add"><i class="bi bi-plus-lg"></i></button></span>`
     );
 
     $('#assessment-tags').on('click', '.remove-tag', function () {
       const $tags = $('#assessment-tags .badge');
 
-      // Only remove if there's more than one badge left (+1) for the add icon
-      if ($tags.length > 2) {
-        $(this).closest('span').remove();
+      // Only proceed if there's more than one badge left (+1 for the add icon)
+      if ($tags.length > 1) {
+        const $badge = $(this).closest('span');
+        const tagText = $badge.contents().get(0).nodeValue.trim();
+
+        // Remove badge from tag container
+        $badge.remove();
+
+        // Uncheck related checkbox entry in modal
+        $(`#assessmentAddSource #source-${tagText.replace(/ +/g, '-')}`).prop(
+          'checked',
+          false
+        );
       } else {
         showFloatingAlert(
           '<i class="bi bi-exclamation-circle-fill me-2"></i>Please keep at least one tag selected.'
@@ -99,6 +245,149 @@
           '<i class="bi bi-exclamation-circle-fill me-2"></i>Please keep at least one topic selected.'
         );
       }
+    });
+
+    // Revert changes to radio buttons when closed
+    $('#assessmentAddSource .modal-footer .close').click(function () {
+      // Collect active tags
+      const activeTags = [];
+      $('#assessment-tags .badge').each(function () {
+        const tagText = $(this).contents().get(0).nodeValue.trim();
+        activeTags.push(tagText);
+      });
+
+      // Iterate over all checkboxes and update their checked state
+      $('#assessmentAddSource input[type="checkbox"]').each(function () {
+        const tagId = $(this).attr('id').replace('source-', '');
+        this.checked = activeTags.includes(tagId.replace(/-/g, ' '));
+      });
+    });
+    // Reflect changes to tags when saved
+    $('#assessmentAddSource .modal-footer .save').click(function () {
+      // Remove all current tags but keep the .add-tag button
+      $('#assessment-tags').find('.badge').remove();
+
+      // Loop through checked checkboxes and re-add badges
+      $(
+        $('#assessmentAddSource input[type="checkbox"]:checked')
+          .toArray()
+          .reverse()
+      ).each(function () {
+        const tag = $(this).siblings('label').text().trim();
+        $('#assessment-tags').prepend(
+          `<span class='badge text-bg-secondary me-2 mb-2' data-assessment-tag="${tag}">${tag}<button type="button" class="ms-2 btn btn-close btn-sm remove-tag" style="--bs-btn-padding-y: 0; --bs-btn-padding-x: 0; --bs-btn-font-size: .5rem;" aria-label="Close"></button></span>`
+        );
+      });
+    });
+
+    $('#assessmentAddSource input[type="checkbox"]').on('change', function () {
+      const $checkboxes = $('#assessmentAddSource input[type="checkbox"]');
+      const $checked = $checkboxes.filter(':checked');
+
+      // If only one checkbox is checked, disable it
+      if ($checked.length === 1) {
+        $checked.prop('disabled', true); // Lock it to prevent uncheck
+      } else {
+        $checkboxes.prop('disabled', false); // Unlock all if more than one is selected
+      }
+    });
+
+    // Sync slider and number input
+    $('#rangeInput').on('input', function () {
+      $('#assessment-itemCount').val(this.value);
+    });
+
+    $('#assessment-itemCount').on('input', function () {
+      const val = Math.max(0, Math.min(100, parseInt(this.value) || 0)); // Clamp to range
+      $('#rangeInput').val(val);
+    });
+
+    const other_options = [
+      {
+        title: 'Include Erroneous Questions',
+        description:
+          'Simulate actual board exam scenarios with items where correct answers may be missing from the options.',
+        id: 0,
+      },
+      {
+        title: 'Include Multi-Part Scenarios',
+        description:
+          'Add sets of questions based on a single real-world situation, similar to case studies.',
+        id: 1,
+      },
+      {
+        title: 'Enable Flashcard Mode',
+        description:
+          'Presents quiz questions as interactive cards that reinforce key concepts through active recall and spaced repetition.',
+        id: 2,
+      },
+      {
+        title: 'Enable “Show Solution” Button',
+        description:
+          'View step-by-step solutions while solving each problem with a click of a button.',
+        id: 3,
+      },
+      {
+        title: 'Enable Timer Display',
+        description:
+          'Show a time elapsed per question and total elapsed time to help track performance.',
+        id: 4,
+      },
+    ];
+
+    for (const opt of other_options) {
+      $('#assessment-other-options').append(
+        `<div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="assessment-other-options-${opt.id}" checked>
+          <label class="form-check-label" for="assessment-other-options-${opt.id}">
+            <strong>${opt.title}</strong><br>
+            <small class="text-muted">${opt.description}</small>
+          </label>
+        </div>`
+      );
+    }
+
+    $('#assessment-generate-questions').click(function () {
+      const setup = {};
+
+      // get topics
+      setup.topics = [];
+      $('#topicSelector input[type="checkbox"]:checked').each(function (i, e) {
+        setup.topics.push($(e).attr('id').split('-').pop());
+      });
+
+      // get sources
+      setup.sources = [];
+      $('#assessment-tags .badge').each(function () {
+        const tagText = $(this).attr('data-assessment-tag');
+        setup.sources.push(tagText);
+      });
+
+      // get itemcount
+      setup.itemCount = parseInt($('#assessment-itemCount').val());
+
+      // Get other options
+      setup.otherOptions = {
+        0: $('#assessment-other-options-0').prop('checked'),
+        1: $('#assessment-other-options-1').prop('checked'),
+        2: $('#assessment-other-options-2').prop('checked'),
+        3: $('#assessment-other-options-3').prop('checked'),
+        4: $('#assessment-other-options-4').prop('checked'),
+      };
+
+      // Prepare the exam-page
+      $('#assessmentExamPageNotReady').addClass('d-none');
+
+      // Change tab, enable quiz tab, then activate quiz tab deactivate setup tab
+      new bootstrap.Tab(
+        $('button[data-bs-target="#assessmentExam"]')[0]
+      ).show();
+    });
+
+    $('#goto-setup').click(function () {
+      new bootstrap.Tab(
+        $('button[data-bs-target="#assessmentSetup"]')[0]
+      ).show();
     });
 
     function showFloatingAlert(message) {
