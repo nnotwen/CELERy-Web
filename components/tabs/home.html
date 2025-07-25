@@ -1,0 +1,72 @@
+<div>
+  <div
+    class="d-flex flex-column justify-content-center align-items-center mb-3 py-5">
+    <h1 class="display-2 text-center">
+      Welcome to
+      <strong>CELERγ</strong>
+    </h1>
+    <p class="lead text-center">
+      The Civil Engineering Licensure Examination Reviewer (γ)
+    </p>
+    <p class="text-secondary text-center">
+      This is a web-based reviewer for the Civil Engineering Licensure
+      Examination. It is designed to help you prepare for the exam by providing
+      a comprehensive set of questions and answers.
+    </p>
+    <div
+      id="homepageTopicSelect"
+      class="row row-cols-1 row-cols-md-2 gy-4 mt-5"></div>
+  </div>
+  <script>
+    $(document).ready(function () {
+      $('#sidebar').find("[href='./']").addClass('active');
+
+      const homepageTopics = [
+        {
+          title: 'Assessment',
+          description:
+            'A comprehensive assessment to evaluate your current knowledge and skills in civil engineering.',
+          icon: 'bi-clipboard-check',
+        },
+        {
+          title: 'Exam Strategies',
+          description:
+            'Tips and strategies for taking the Civil Engineering Licensure Examination.',
+          icon: 'bi-lightbulb-fill',
+        },
+        {
+          title: 'Resources',
+          description: 'Additional resources to help you prepare for the exam.',
+          icon: 'bi-journal-bookmark-fill',
+        },
+        {
+          title: 'Stats',
+          description:
+            'Track your progress and performance with detailed statistics.',
+          icon: 'bi-bar-chart-fill',
+        },
+      ];
+
+      for (const item of homepageTopics) {
+        $('#homepageTopicSelect').append(
+          `<div class="btn text-start d-flex align-items-stretch">
+                <div class="text-decoration-none text-secondary-subtle">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <i class="bi ${item.icon} p-3 fs-1 me-2"></i>
+                                <div>
+                                  <h5 class="card-title">${item.title}</h5>
+                                  <p class="card-text">${item.description}</p>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+        );
+      }
+    });
+  </script>
+  <body></body>
+</div>

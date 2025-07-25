@@ -1,57 +1,77 @@
+<!-- Signup Modal body -->
+
 <div id="accountChooserPane" class="row gap-3"></div>
 
 <script>
-  profiles = JSON.parse(localStorage.getItem('users') || '[]');
-  for (const profile of profiles) {
-    const date = new Date(profile.id);
-    $('#accountChooserPane').append(
-      `<div class="col-12" profile-id="${profile.id}">
-            <div class="card d-flex flex-row align-items-center" onclick="localStorage.setItem('activeUserId', JSON.stringify(${JSON.stringify(
-              profile.id
-            )})); location.reload();" style="cursor: pointer;">
-                <img src="../assets/images/${
-                  profile.avatar
-                }.png" width="75" height="75" style="width:fit-content;" class="p-2 card-img-top rounded-circle" alt="${
-        profile.username
-      }">
-                <div class="card-body flex-1">
-                    <h5 class="card-title">${profile.username}</h5>
-                    <p class="card-text text-secondary">Created: ${date.toLocaleString(
-                      'en-us',
-                      {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      }
-                    )}</p>
-                </div>
-                <button class="btn-close position-absolute top-0 end-0 m-2" onclick="deleteProfile(${
-                  profile.id
-                })" aria-label="Delete Profile"></button>
-            </button>
-        </div>`
-    );
+  $(document).ready(function () {
+    $('#accountChooserPane').html('');
+    const getProfiles = () => JSON.parse(localStorage.getItem('users') || '[]');
 
-    $('#accountChooserPane').append(
-      `<div class="col-12 text-center">
-            <button class="btn btn-primary w-100" onclick="">
-                <i class="bi bi-person-fill-add me-2"></i>Create a new local account
-            </button>
-        </div>`
-    );
+    $.get('./components/account-chooser-card.html', function (data) {
+      for (const profile of getProfiles()) {
+        const date = new Date(profile.id);
+        const cardHtml = data
+          .replace(/{{profileId}}/g, profile.id)
+          .replace(/{{avatar}}/g, profile.avatar)
+          .replace(/{{username}}/g, profile.username)
+          .replace(
+            /{{creationDate}}/g,
+            date.toLocaleString('en-us', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+            })
+          );
+        $('#accountChooserPane').append(cardHtml);
+      }
 
-    function deleteProfile(id) {
-      const profiles = JSON.parse(localStorage.getItem('users') || '[]');
-      const updatedProfiles = profiles.filter((p) => p.id !== id);
-      localStorage.setItem('users', JSON.stringify(updatedProfiles));
-      $(`div[profile-id="${id}"]`).remove();
-      if (updatedProfiles.length === 0) {
+      if (getProfiles().length) {
+        $('#accountChooserPane').prepend(
+          '<div class="col-12"><div class="small alert alert-danger mb-0" role="alert"><strong>Note! </strong>Deleted local accounts are gone forever!</div></div>'
+        );
+      }
+
+      $('#accountChooserPane')
+        .append(
+          '<div class="col-12"><button class="btn btn-primary w-100 me-2 mt-2"><i class="bi bi-person-fill-add me-2"></i> Create New Account</button></div>'
+        )
+        .on('click', '.btn-primary', function () {
+          $('#signUpModalTitle').text('Create Local Account');
+          $('#signUpModalBody').load(
+            './components/sign-up.html',
+            function () {}
+          );
+        });
+    });
+
+    $('#accountChooserPane').on('click', '.card', function () {
+      const profileId = $(this).attr('profile-id');
+      localStorage.setItem('activeUserId', profileId);
+      window.location.reload();
+    });
+
+    $('#accountChooserPane').on('click', '.btn', function (event) {
+      event.stopPropagation(); // Prevent the card click event
+      const profileId = $(this).closest('.card').attr('profile-id');
+      const old_profiles = getProfiles();
+      const new_profiles = old_profiles.filter((p) => p.id != profileId);
+
+      localStorage.setItem('users', JSON.stringify(new_profiles));
+
+      $(`div[profile-id="${profileId}"]`).remove();
+
+      if (new_profiles.length === 0) {
         $('#accountChooserPane').prepend(
           '<p class="text-secondary">No accounts available.</p>'
         );
       }
-    }
-  }
+
+      if (profileId === localStorage.getItem('activeUserId')) {
+        localStorage.removeItem('activeUserId');
+        window.location.reload();
+      }
+    });
+  });
 </script>

@@ -1,16 +1,79 @@
 $(document).ready(function () {
   // Load sidebar content
+  const sidebarClass =
+    'd-flex flex-column flex-shrink-0 p-3 bg-secondary-subtle text-secondary-subtle';
+  const sidebarCSS = {
+    width: '280px',
+    'min-height': '100vh',
+    position: 'sticky',
+    top: '0',
+  };
+  const sidebarTopics = [
+    {
+      title: 'Home',
+      description: 'Return to the home page.',
+      icon: 'bi-house-door-fill',
+      tabId: 'home',
+    },
+    {
+      title: 'Assessment',
+      description:
+        'A comprehensive assessment to evaluate your current knowledge and skills in civil engineering.',
+      icon: 'bi-clipboard-check',
+      tabId: 'assessment',
+    },
+    {
+      title: 'Exam Strategies',
+      description:
+        'Tips and strategies for taking the Civil Engineering Licensure Examination.',
+      icon: 'bi-lightbulb-fill',
+      tabId: 'exam-strategies',
+    },
+    {
+      title: 'Resources',
+      description: 'Additional resources to help you prepare for the exam.',
+      icon: 'bi-journal-bookmark-fill',
+      tabId: 'resources',
+    },
+    {
+      title: 'Stats',
+      description:
+        'Track your progress and performance with detailed statistics.',
+      icon: 'bi-bar-chart-fill',
+      tabId: 'stats',
+    },
+  ];
+
+  for (const topic of sidebarTopics) {
+    $.get('./components/tabs/' + topic.tabId + '.html', function (data) {
+      $('#main').append(
+        $(data).addClass('tab-pane fade').attr('id', topic.tabId)
+      );
+      if (topic.tabId === 'home') {
+        $('#' + topic.tabId).addClass('show active');
+      }
+    });
+  }
+
   $('#sidebar')
-    .addClass(
-      'd-flex flex-column flex-shrink-0 p-3 bg-secondary-subtle text-secondary-subtle"'
-    )
-    .css({
-      width: '280px',
-      'min-height': '100vh',
-      position: 'sticky',
-      top: '0',
-    })
+    .addClass(sidebarClass)
+    .css(sidebarCSS)
     .load('./components/sidebar.html', function () {
+      for (const topic of sidebarTopics) {
+        $(this)
+          .find('#sidebarTopics')
+          .append(
+            `<li class="nav-item">
+              <div class="btn text-start nav-link text-body" data-bs-toggle="tab" data-bs-target="#${topic.tabId}" aria-current="page">
+                <i class="bi ${topic.icon} me-2"></i>
+                ${topic.title}
+              </div>
+            </li>`
+          );
+      }
+
+      $("[data-bs-target='#home']").addClass('active');
+
       const currentYear = new Date().getFullYear();
       $('#copyrightYear').html(
         `Copyright © ${
@@ -18,6 +81,7 @@ $(document).ready(function () {
         } nnotwen. <br> All rights reserved.`
       );
 
+      // Setup page theme when sidebar is loaded
       const icon = {
         dark: 'bi-moon-stars-fill',
         light: 'bi-sun-fill',
@@ -25,20 +89,22 @@ $(document).ready(function () {
       };
 
       //   Set initial theme
-      const systemThemeQuery = window.matchMedia(
-        '(prefers-color-scheme: dark)'
-      );
-      let systemTheme = systemThemeQuery.matches ? 'dark' : 'light';
-      setTheme(atob(localStorage.getItem('theme') || btoa(systemTheme)));
+      const systemDarkMode = '(prefers-color-scheme: dark)';
+      const getSystemTheme = () =>
+        window.matchMedia(systemDarkMode).matches ? 'dark' : 'light';
+
+      setTheme(atob(localStorage.getItem('theme') || btoa(getSystemTheme())));
 
       //   Handle theme switching on click
       $('[data-bs-theme-value]').click(function () {
-        console.log(this);
         setTheme($(this).data('bs-theme-value'));
       });
 
       function setTheme(theme) {
-        $('html').attr('data-bs-theme', theme !== 'auto' ? theme : systemTheme);
+        $('html').attr(
+          'data-bs-theme',
+          theme !== 'auto' ? theme : getSystemTheme()
+        );
         localStorage.setItem('theme', btoa(theme));
 
         // Update the icon based on the selected theme
@@ -62,32 +128,33 @@ $(document).ready(function () {
         : [];
       let currentUserId = localStorage.getItem('activeUserId');
 
+      // Set profile icon and add notification if user is signed out
       if (!profiles.length || !profiles.find((x) => x.id == currentUserId)) {
         $('#profile').html('<i class="bi bi-person-circle me-2"></i>Sign In');
-        $('body').append(
-          `<div id="signedOutNotification" class="alert alert-warning alert-dismissible fade show opacity-90" style="max-width:350px; position:fixed; top: 20px; right: 20px; z-index: 10000;" role="alert">
-                <strong>You are not signed in!</strong> Please sign in to access personalized features.
-                <div class="progress mt-2" style="height:4px;">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: 100%; transition: width 10s linear;"></div>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>`
+        $('.notification-pane').load(
+          './components/signed-out-notification.html',
+          function () {
+            const $this = $(this);
+
+            function closeNotification() {
+              const $container = $this.find('#signedOutNotification');
+              if ($container.length) {
+                new bootstrap.Alert($container).close();
+              }
+            }
+
+            // When profile icon is clicked, dismiss the notification
+            $('#profile').one('click', () => closeNotification($this));
+
+            const $progressBar = $(this).find('.progress-bar');
+            setTimeout(() => $progressBar.css('width', '0%'), 250);
+            setTimeout(() => closeNotification($this), 10_200);
+          }
         );
-
-        setTimeout(() => {
-          $('#signedOutNotification .progress-bar').css('width', '0%');
-        }, 1_000);
-
-        setTimeout(() => {
-          const $signedOut = $('#signedOutNotification');
-          if (!$signedOut.length) return;
-          const bsAlert = new bootstrap.Alert($signedOut[0]);
-          bsAlert.close();
-        }, 11_000);
       } else {
         // Set user profile using custom profile picture
         $('#profile').html(
-          `<image src="/assets/images/${
+          `<image src="./assets/images/${
             profiles.find((x) => x.id == currentUserId).avatar
           }.png" class="rounded-circle me-2" style="width: 24px; height: 24px;">` +
             `<span class="d-none d-sm-inline">${
@@ -103,13 +170,11 @@ $(document).ready(function () {
         currentUserId = localStorage.getItem('activeUserId');
 
         if (!profiles.length) {
-          console.log('No profiles found, showing sign up modal');
           $('#signUpModalTitle').text('Create Local Account');
           $('#signUpModalBody')
             .html('')
             .load('./components/sign-up.html', function () {});
         } else if (!profiles.find((x) => x.id === currentUserId)) {
-          console.log('No active user found, showing sign up modal');
           $('#signUpModalTitle').text('Sign In');
           $('#signUpModalBody')
             .html('')
@@ -121,50 +186,5 @@ $(document).ready(function () {
         const target = $(this).data('bs-target');
         $(target).appendTo('body');
       });
-    });
-
-  // Load homepage content
-  $('#home')
-    .addClass('w-100 vh-100 p-3 overflow-scroll-y')
-    .load('./components/home.html', function () {
-      const homepageTopics = [
-        {
-          title: 'Quick Review',
-          description:
-            'A quick review of the Civil Engineering Licensure Examination topics.',
-          link: '/quick-review',
-        },
-        {
-          title: 'Practice Questions',
-          description: 'A set of practice questions to test your knowledge.',
-          link: '/practice-questions',
-        },
-        {
-          title: 'Exam Strategies',
-          description:
-            'Tips and strategies for taking the Civil Engineering Licensure Examination.',
-          link: '/exam-strategies',
-        },
-        {
-          title: 'Resources',
-          description: 'Additional resources to help you prepare for the exam.',
-          link: '/resources',
-        },
-      ];
-
-      for (const item of homepageTopics) {
-        $('#homepageTopicSelect').append(
-          `<button class="btn text-start d-flex align-items-stretch">
-                <div class="text-decoration-none text-secondary-subtle">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">${item.title}</h5>
-                            <p class="card-text">${item.description}</p>
-                        </div>
-                    </div>
-                </div>
-            </button>`
-        );
-      }
     });
 });

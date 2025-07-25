@@ -1,3 +1,5 @@
+<!-- Signup Modal body -->
+
 <form id="signInForm">
   <div class="mb-3">
     <div class="alert alert-primary small" role="alert">
@@ -12,7 +14,6 @@
   <div
     id="signupImageChooser"
     class="d-flex flex-wrap gap-3 justify-content-center mb-2"></div>
-
   <button type="submit" class="btn btn-primary w-100 mt-2">
     Create Account
   </button>
@@ -33,7 +34,7 @@
   }
 </style>
 <script>
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < 8; i++) {
     $('#signupImageChooser').append(
       `<input type="radio" class="btn-check" name="avatar" id="avatar${i}" autocomplete="off" value="profile_${i}">
       <label class="btn p-0" for="avatar${i}">
@@ -61,13 +62,12 @@
         username: username,
         avatar: avatar || `profile_${Math.floor(Math.random() * 9)}`,
         id: Date.now(),
+        data: [],
       });
 
       localStorage.setItem('users', JSON.stringify(profiles));
-      $('.modal.show').each(function () {
-        const modal = bootstrap.Modal.getInstance(this);
-        if (modal) modal.hide();
-      });
+      localStorage.setItem('activeUserId', profiles[profiles.length - 1].id);
+      location.reload(); // Reload the page to reflect changes
     });
 </script>
 <body></body>

@@ -1,0 +1,22 @@
+<!-- Card Template -->
+<div class="col-12">
+  <div
+    class="card d-flex flex-row align-items-center"
+    style="cursor: pointer"
+    profile-id="{{profileId}}">
+    <img
+      src="../assets/images/{{avatar}}.png"
+      width="75"
+      height="75"
+      style="width: fit-content"
+      class="p-2 card-img-top rounded-circle"
+      alt="{{username}}" />
+    <div class="card-body flex-1">
+      <h5 class="card-title">{{username}}</h5>
+      <p class="card-text text-secondary">Created: {{creationDate}}</p>
+    </div>
+    <button class="btn position-absolute top-0 end-0 m-2">
+      <i class="bi bi-trash-fill text-danger"></i>
+    </button>
+  </div>
+</div>
