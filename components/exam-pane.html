@@ -1,0 +1,64 @@
+<div>
+  <div class="row g-2 mt-3 sticky-top">
+    <div class="col-12 col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" id="cur-elapsed-time">00:00:00</h5>
+          <p class="card-text text-muted">Current Elapsed Time</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" id="total-elapsed-time">00:00:00</h5>
+          <p class="card-text text-muted">Total Elapsed Time</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" id="cur-progress">1/50</h5>
+          <p class="card-text text-muted">Progress</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-3 overflow-auto" id="question-container">
+    <ol class="ps-3" style="max-width: 98%"></ol>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.get('./components/question.html', function (format) {
+      $.get('./assets/materials/CELE 2018.json', function (questions) {
+        for (const question of questions) {
+          $('#question-container ol').append(
+            format
+              .replace(/{{question}}/g, question.question)
+              .replace(/{{img_source}}/g, question.image)
+              .replace(/{{questionId}}/g, question.questionId)
+              .replace(/{{choiceA}}/g, question.choices[0])
+              .replace(/{{choiceB}}/g, question.choices[1])
+              .replace(/{{choiceC}}/g, question.choices[2])
+              .replace(/{{choiceD}}/g, question.choices[3])
+          );
+
+          if (!question.image) {
+            $(`[data-question-reference-id="${question.questionId}"]`).remove();
+          }
+
+          $(".question-item [type='radio']").click(function () {
+            const cur = $(".question-item [type='radio']:checked").length;
+            const max = $('#cur-progress').attr('data-max-value');
+            $('#cur-progress').html(`${cur}/${max}`);
+          });
+        }
+      });
+    });
+
+    $();
+  });
+</script>
+<body></body>

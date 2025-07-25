@@ -378,6 +378,33 @@
       // Prepare the exam-page
       $('#assessmentExamPageNotReady').addClass('d-none');
 
+      // Load Exam UI
+      $('#assessmentExam').load('./components/exam-pane.html', function () {
+        // Clear previous interval
+        clearInterval($('#assessmentExam').attr('data-cur-interval-ref'));
+
+        // Set progressCount
+        $('#cur-progress')
+          .html(`0/${setup.itemCount}`)
+          .attr('data-max-value', setup.itemCount);
+
+        // Set/unset timer
+        if (setup.otherOptions['4']) {
+          let ee = 0;
+          const interval = setInterval(function () {
+            ee++;
+            const hh = String(Math.floor(ee / 3600)).padStart(2, '0');
+            const mm = String(Math.floor((ee % 3600) / 60)).padStart(2, '0');
+            const ss = String(ee % 60).padStart(2, '0');
+            $('#total-elapsed-time').html(`${hh}:${mm}:${ss}`);
+          }, 1_000);
+          // Store interval reference (for clearInterval)
+          $('#assessmentExam').attr('data-cur-interval-ref', interval);
+        } else {
+          $('#total-elapsed-time, #cur-elapsed-time').html('--:--:--');
+        }
+      });
+
       // Change tab, enable quiz tab, then activate quiz tab deactivate setup tab
       new bootstrap.Tab(
         $('button[data-bs-target="#assessmentExam"]')[0]
