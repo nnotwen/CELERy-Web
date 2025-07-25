@@ -1,6 +1,6 @@
 <div
   id="signedOutNotification"
-  class="alert alert-warning alert-dismissible fade show opacity-90"
+  class="alert alert-warning alert-dismissible fade show floating-alert d-flex"
   style="
     max-width: 350px;
     position: fixed;
@@ -9,19 +9,18 @@
     z-index: 10000;
   "
   role="alert">
-  <strong>You are not signed in!</strong>
-  Please sign in to access personalized features.
-  <div class="progress mt-2" style="height: 4px">
-    <div
-      class="progress-bar bg-warning"
-      role="progressbar"
-      style="width: 100%; transition: width 10s linear"></div>
+  <i class="bi bi-info-circle-fill me-3"></i>
+  <div>
+    <strong>You are not signed in!</strong>
+    <br />
+    <small>Please sign in to access personalized features.</small>
+    <div class="progress mt-2" style="height: 4px">
+      <div
+        class="progress-bar bg-warning"
+        role="progressbar"
+        style="width: 100%; transition: width 10s linear"></div>
+    </div>
   </div>
-  <button
-    type="button"
-    class="btn-close"
-    data-bs-dismiss="alert"
-    aria-label="Close"></button>
 </div>
 
 <body></body>

@@ -1,1 +1,119 @@
-<div>Page under construction 🛠️</div>
+<div class="m-2 py-4">
+  <ul class="nav nav-tabs nav-justified" role="tablist" id="assessmentTabs">
+    <li class="nav-item" role="presentation">
+      <button
+        class="btn nav-link active"
+        data-bs-toggle="tab"
+        data-bs-target="#assessmentSetup">
+        <i class="bi bi-gear-fill me-2"></i>
+        Setup
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button
+        class="btn nav-link"
+        data-bs-toggle="tab"
+        data-bs-target="#assessmentExam"
+        disabled>
+        <i class="bi bi-journal-text me-2"></i>
+        Exam
+      </button>
+    </li>
+  </ul>
+  <div class="tab-content my-2">
+    <div role="tabpanel" id="assessmentSetup" class="tab-pane fade active show">
+      <div class="row g-3 my-2">
+        <div id="topicSelector" class="col-lg-6 col-md-12">
+          <h5>Select Topics</h5>
+          <input
+            type="checkbox"
+            class="btn-check"
+            id="topics-MSTC"
+            autocomplete="off"
+            checked />
+          <label class="btn btn-outline-primary" for="topics-MSTC">MSTC</label>
+          <input
+            type="checkbox"
+            class="btn-check"
+            id="topics-HPGE"
+            autocomplete="off"
+            checked />
+          <label class="btn btn-outline-primary" for="topics-HPGE">HPGE</label>
+          <input
+            type="checkbox"
+            class="btn-check"
+            id="topics-PSAD"
+            autocomplete="off"
+            checked />
+          <label class="btn btn-outline-primary" for="topics-PSAD">PSAD</label>
+          <br />
+          <br />
+          <h5>Included Tags</h5>
+          <div id="assessment-tags"></div>
+        </div>
+        <div class="col-lg-6 col-md-12">B</div>
+      </div>
+    </div>
+    <div role="tabpanel" id="assessmentExam" class="tab-pane fade">B</div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    const tags = [
+      'CELE 2018',
+      'CELE 2019',
+      'CELE 2020',
+      'CELE 2021',
+      'CELE 2022',
+    ];
+
+    for (const tag of tags) {
+      $('#assessment-tags').append(
+        `<span class='badge text-bg-secondary me-2 mb-2'>${tag}<button type="button" class="ms-2 btn btn-close btn-sm remove-tag" style="--bs-btn-padding-y: 0; --bs-btn-padding-x: 0; --bs-btn-font-size: .5rem;" aria-label="Close"></button></span>`
+      );
+    }
+    $('#assessment-tags').append(
+      `<span class="badge text-bg-primary"><button type="button" class="btn btn-sm add-tag" style="--bs-btn-padding-y: 0; --bs-btn-padding-x: 0; --bs-btn-font-size: .5rem;" aria-label="Add"><i class="bi bi-plus-lg"></i></button></span>`
+    );
+
+    $('#assessment-tags').on('click', '.remove-tag', function () {
+      const $tags = $('#assessment-tags .badge');
+
+      // Only remove if there's more than one badge left (+1) for the add icon
+      if ($tags.length > 2) {
+        $(this).closest('span').remove();
+      } else {
+        showFloatingAlert(
+          '<i class="bi bi-exclamation-circle-fill me-2"></i>Please keep at least one tag selected.'
+        );
+      }
+    });
+
+    $('#topicSelector input[type="checkbox"]').on('change', function () {
+      const group = $('#topicSelector input[type="checkbox"]');
+      const checked = group.filter(':checked').length;
+
+      if (checked === 0) {
+        this.checked = true;
+        showFloatingAlert(
+          '<i class="bi bi-exclamation-circle-fill me-2"></i>Please keep at least one topic selected.'
+        );
+      }
+    });
+
+    function showFloatingAlert(message) {
+      const alertId = 'alert-' + Date.now(); // unique ID
+      const alertHtml = `<span id="${alertId}" class="alert alert-danger alert-dismissible fade show floating-alert" role="alert">${message}</span>`;
+
+      $('.notification-pane').append(alertHtml);
+
+      // Fade out and remove after 10 seconds
+      setTimeout(() => {
+        const alertEl = $('#' + alertId);
+        alertEl.fadeOut(500, function () {
+          alertEl.remove();
+        });
+      }, 10000);
+    }
+  });
+</script>

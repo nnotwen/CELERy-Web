@@ -131,26 +131,22 @@ $(document).ready(function () {
       // Set profile icon and add notification if user is signed out
       if (!profiles.length || !profiles.find((x) => x.id == currentUserId)) {
         $('#profile').html('<i class="bi bi-person-circle me-2"></i>Sign In');
-        $('.notification-pane').load(
-          './components/signed-out-notification.html',
-          function () {
-            const $this = $(this);
+        $.get('./components/signed-out-notification.html', function (data) {
+          const $notif = $(data);
+          $('.notification-pane').append($notif);
 
-            function closeNotification() {
-              const $container = $this.find('#signedOutNotification');
-              if ($container.length) {
-                new bootstrap.Alert($container).close();
-              }
-            }
+          // Animate progress bar
+          setTimeout(() => {
+            $notif.find('.progress-bar').css('width', '0%');
+          }, 250);
 
-            // When profile icon is clicked, dismiss the notification
-            $('#profile').one('click', () => closeNotification($this));
-
-            const $progressBar = $(this).find('.progress-bar');
-            setTimeout(() => $progressBar.css('width', '0%'), 250);
-            setTimeout(() => closeNotification($this), 10_200);
-          }
-        );
+          // Fade out and remove notification after 10 seconds
+          setTimeout(() => {
+            $notif.fadeOut(500, function () {
+              $notif.remove();
+            });
+          }, 10_250);
+        });
       } else {
         // Set user profile using custom profile picture
         $('#profile').html(
