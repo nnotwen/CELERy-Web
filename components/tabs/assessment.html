@@ -421,7 +421,7 @@
       const alertId = 'alert-' + Date.now(); // unique ID
       const alertHtml = `<span id="${alertId}" class="alert alert-danger alert-dismissible fade show floating-alert" role="alert">${message}</span>`;
 
-      $('.notification-pane').append(alertHtml);
+      $('.notification-pane').prepend(alertHtml);
 
       // Fade out and remove after 10 seconds
       setTimeout(() => {
